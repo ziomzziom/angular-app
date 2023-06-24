@@ -1,0 +1,48 @@
+﻿@model IEnumerable<GTS.Gqueue.Entities.AwaitingPerson>
+
+@{
+    ViewData["Title"] = "Awaiting People";
+}
+
+@section Scripts
+{
+<script type="text/javascript">
+    function dequeue(id) {
+        console.log('dequeue')
+        $.ajax({
+            type: "POST",
+            url: "AwaitingPeople/Dequeue/" + id,
+            success: function (data) {
+                 $('#data').html(data);
+            }
+        });
+    }
+
+    function requeue(id) {
+        $.ajax({
+            type: "POST",
+            url: "AwaitingPeople/Requeue/" + id,
+            success: function (data) {
+                $('#data').html(data);
+            }
+        });
+    }
+</script>
+}
+
+<h1>Queues</h1>
+<h1>@ViewBag.Queue.Name</h1>
+<h4>Awaiting People</h4>
+<br>
+
+<p>
+    <a asp-action="Create" asp-route-queueId="@ViewBag.Queue.Id">Create New Person</a>
+</p>
+
+<div id="data">
+    @await Html.PartialAsync("_IndexPartial", Model)
+</div>
+
+<div>
+    <a asp-controller="Queues" asp-action="Details" asp-route-id="@ViewBag.Queue.Id">Back to Queue Details</a>
+</div>
